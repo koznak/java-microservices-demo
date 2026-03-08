@@ -1,0 +1,27 @@
+services:
+  catalog-service:
+    build:
+      context: .
+      dockerfile: catalog-service/Dockerfile
+    ports:
+      - "5001:8081"
+
+  orders-service:
+    build:
+      context: .
+      dockerfile: orders-service/Dockerfile
+    ports:
+      - "5002:8082"
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    environment:
+      SERVICES_CATALOG_URL: http://catalog-service:8081
+      SERVICES_ORDERS_URL: http://orders-service:8082
+    ports:
+      - "5000:8080"
+    depends_on:
+      - catalog-service
+      - orders-service
